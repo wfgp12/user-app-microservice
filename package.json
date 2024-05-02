@@ -1,0 +1,33 @@
+{
+  "name": "user-app",
+  "version": "1.0.0",
+  "description": "user microservice and authentication with mongodb for SIMPLAVOLEI project",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/wfgp12/user-app-microservice.git"
+  },
+  "keywords": [
+    "NodeJS",
+    "MongoDB",
+    "Microservice",
+    "Docker",
+    "Express"
+  ],
+  "author": "wfgp12",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wfgp12/user-app-microservice/issues"
+  },
+  "homepage": "https://github.com/wfgp12/user-app-microservice#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.3"
+  }
+}
