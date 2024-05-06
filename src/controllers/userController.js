@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const { findUser } = require('../services/userServices');
+const { generateToken } = require('../utils/auth');
 
 const UserController = {
     getAllUsers: async (req, res) => {
@@ -59,6 +61,23 @@ const UserController = {
             res.json({ message: 'Usuario eliminado correctamente' });
         } catch (error) {
             res.status(500).json({ error: error.message });
+        }
+    },
+
+    loginUser: async (req, res) => {
+        try {
+            const { email, password } = req.body;
+            const user = await  findUser({ email, password });
+
+            if (!user) {
+                return res.status(401).json({ error: 'Credenciales inválidas' });
+            }
+
+            const token = generateToken(user);
+            res.json({ user, token });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: 'Error al iniciar sesión' });
         }
     }
 };

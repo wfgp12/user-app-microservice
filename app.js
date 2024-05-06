@@ -8,6 +8,8 @@ const userRoutes = require('./src/routes/userRoutes');
 const roleRoutes = require('./src/routes/roleRoutes');
 const permissionRoutes = require('./src/routes/permissionRoutes'); 
 
+const initializeService = require('./src/utils/initializeService');
+
 dotenv.config();
 
 const app = express();
@@ -35,8 +37,10 @@ app.use((error, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-mongoose.connect(process.env.DB_CONNECTION).then(() => {
+mongoose.connect(process.env.DB_CONNECTION).then(async() => {
     console.log('Conexión a MongoDB establecida correctamente');
+
+    await initializeService();
 
     app.listen(PORT, () => {
         console.log(`Servidor Express en ejecución en el puerto ${PORT}`);

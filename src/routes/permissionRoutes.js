@@ -1,12 +1,12 @@
 const express = require('express');
-const router = express.Router();
+const permissionRouter = express.Router();
 const PermissionController = require('../controllers/permissionController');
 
 // Rutas para operaciones CRUD de permisos
-router.get('/', PermissionController.getAllPermissions);
-router.post('/', PermissionController.createPermission);
-router.get('/:permissionId', PermissionController.getPermissionById);
-router.put('/:permissionId', PermissionController.updatePermission);
-router.delete('/:permissionId', PermissionController.deletePermission);
+permissionRouter.get('/', PermissionController.getAllPermissions);
+permissionRouter.post('/', PermissionController.createPermission);
+permissionRouter.get('/:permissionId', PermissionController.getPermissionById);
+permissionRouter.put('/:permissionId', PermissionController.updatePermission);
+permissionRouter.delete('/:permissionId', PermissionController.deletePermission);
 
-module.exports = router;
+module.exports = permissionRouter;
