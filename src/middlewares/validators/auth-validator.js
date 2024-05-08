@@ -1,22 +1,30 @@
+const { ObjectId } = require('mongodb');
+const { header } = require('express-validator');
+
 const { loginSchema } = require('../schemas/auth-schemas');
 const { verifyToken } = require('../../utils/auth');
+const { findUser } = require('../../services/userServices');
 
-function validateToken(req, res, next) {
-    const token = req.headers.authorization;
+const validateToken = [
+    header('Authorization')
+        .exists().withMessage('Token de sesión requerido en los headers').bail()
+        .custom(async (value, { req }) => {
 
-    if (!token) {
-        return res.status(401).json({ error: 'Token de sesión requerido' });
-    }
-
-    const decodedToken = verifyToken(token);
-
-    if (!decodedToken) {
-        return res.status(401).json({ error: 'Token de sesión inválido o expirado' });
-    }
-
-    req.userId = decodedToken.userId;
-    next();
-}
+            const token = value.split(' ')[1];
+            const decodedToken = verifyToken(token);
+            
+            if (!decodedToken) {
+                throw new Error('Token de sesión inválido');
+            }
+            try {
+                req.body.user = await findUser({ _id: new ObjectId(decodedToken.userId) });
+                return true;
+            } catch (error) {
+                console.error('Error al decodificar el token:', error);
+                throw new Error('Token de sesión inválido');
+            }
+        }).bail()
+]
 
 function validateLogin(req, res, next) {
     const { error } = loginSchema.validate(req.body);

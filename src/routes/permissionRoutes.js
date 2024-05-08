@@ -1,12 +1,40 @@
 const express = require('express');
-const permissionRouter = express.Router();
+
+const { 
+    validateCreatePermission, 
+    validateUpdatePermission, 
+    validateGetPermission, 
+    validateGetAllPermission, 
+    validateDeletePermission 
+} = require('../middlewares/validators/permission-validator');
+const handleValidationResult = require('../middlewares/handleValidationErrors');
 const PermissionController = require('../controllers/permissionController');
 
-// Rutas para operaciones CRUD de permisos
-permissionRouter.get('/', PermissionController.getAllPermissions);
-permissionRouter.post('/', PermissionController.createPermission);
-permissionRouter.get('/:permissionId', PermissionController.getPermissionById);
-permissionRouter.put('/:permissionId', PermissionController.updatePermission);
-permissionRouter.delete('/:permissionId', PermissionController.deletePermission);
+const permissionRouter = express.Router();
+
+permissionRouter.get('/', [
+    validateGetAllPermission,
+    handleValidationResult
+], PermissionController.getAllPermissions);
+
+permissionRouter.post('/', [
+    validateCreatePermission,
+    handleValidationResult
+], PermissionController.createPermission);
+
+permissionRouter.get('/:permissionId', [
+    validateGetPermission,
+    handleValidationResult
+], PermissionController.getPermissionById);
+
+permissionRouter.put('/:permissionId', [
+    validateUpdatePermission,
+    handleValidationResult
+], PermissionController.updatePermission);
+
+permissionRouter.delete('/:permissionId', [
+    validateDeletePermission,
+    handleValidationResult
+],PermissionController.deletePermission);
 
 module.exports = permissionRouter;
