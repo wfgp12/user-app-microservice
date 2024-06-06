@@ -5,7 +5,6 @@ const { errorResponse, successResponse } = require('../utils/response-utils');
 const RoleController = {
     getAllRoles: async (req, res) => {
         try {
-            console.log('*********');
             const roles = await findAggregateRole({}, { _id: 1, name: 1 });
             res.json(successResponse(roles));
         } catch (error) {

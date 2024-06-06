@@ -6,14 +6,17 @@ async function findUser(where) {
     try {
         const user = await User.aggregate([
             { $match: where },
-            // {
-            //     $lookup: {
-            //         from: 'roles',
-            //         localField: 'roles',
-            //         foreignField: '_id',
-            //         as: 'roles'
-            //     }
-            // },
+            {
+                $lookup: {
+                    from: 'roles',
+                    localField: 'roles',
+                    foreignField: '_id',
+                    as: 'roles',
+                    pipeline: [
+                        { $project: { _id: 1, name: 1 } }
+                    ]
+                },
+            },
             // { $unwind: '$roles' }, 
             // {
             //     $lookup: {

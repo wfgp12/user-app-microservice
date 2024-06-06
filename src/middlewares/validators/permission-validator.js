@@ -8,10 +8,10 @@ const { findPermission } = require('../../services/permissionServices');
 const validatePermission = (permission) => [
     check('user')
         .exists().withMessage('No se encontró al usuario').bail()
-        .custom(async (user) => {
+        .custom(async (user, {req}) => {
             try {
-                const permissions = await findPermissionsByRole({ _id: new ObjectId(user.roles[0]) })
-                if (!permissions?.length || !permissions.includes(permission)) {
+                const permissions = await findPermissionsByRole({ _id: user.roles[0]._id})
+                if (!permissions?.length || !permissions.includes(permission || req.body.permission)) {
                     return res.status(403).json({ error: 'No tienes permisos para crear una nueva funcionalidad' });
                 }
                 return true;
@@ -62,6 +62,12 @@ const validateGetAllPermission = [
 const validateDeletePermission = [
     ...validateToken,
     ...validatePermission('deletePermission'),
+];
+
+const validatePermissionValidator = [
+    ...validateToken,
+    check('permission').exists().withMessage('Permiso requerido').bail(),
+    ...validatePermission()
 ]
 
 
@@ -71,5 +77,6 @@ module.exports = {
     validateUpdatePermission,
     validateGetPermission,
     validateGetAllPermission,
-    validateDeletePermission
+    validateDeletePermission,
+    validatePermissionValidator
 }

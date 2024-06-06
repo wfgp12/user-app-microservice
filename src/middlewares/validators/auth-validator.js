@@ -8,7 +8,6 @@ const validateToken = [
     header('Authorization')
         .exists().withMessage('Token de sesión requerido en los headers').bail()
         .custom(async (value, { req }) => {
-
             const token = value.split(' ')[1];
             const decodedToken = verifyToken(token);
             
