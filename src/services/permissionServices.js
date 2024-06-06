@@ -9,7 +9,6 @@ module.exports = {
         }
     },
     findPermission: async (where) => {
-        console.log(where);
         try {
             const permission = await Permission.aggregate([
                 { $match: where }

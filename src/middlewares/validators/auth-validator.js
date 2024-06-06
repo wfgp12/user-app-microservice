@@ -1,7 +1,6 @@
 const { ObjectId } = require('mongodb');
-const { header } = require('express-validator');
+const { header, check } = require('express-validator');
 
-const { loginSchema } = require('../schemas/auth-schemas');
 const { verifyToken } = require('../../utils/auth');
 const { findUser } = require('../../services/userServices');
 
@@ -26,13 +25,13 @@ const validateToken = [
         }).bail()
 ]
 
-function validateLogin(req, res, next) {
-    const { error } = loginSchema.validate(req.body);
-    if (error) {
-        return res.status(400).json({ error: error.details[0].message });
-    }
-    next();
-}
+const validateLogin = [
+    check('email')
+        .isEmail().withMessage('El email debe ser válido')
+        .notEmpty().withMessage('El email es obligatorio'),
+    check('password')
+        .notEmpty().withMessage('La contraseña es obligatoria')
+];
 
 module.exports = {
     validateToken,

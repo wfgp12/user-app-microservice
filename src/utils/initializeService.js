@@ -24,12 +24,17 @@ async function initializeService() {
                 permission = new Permission({ name: permissionName });
                 await permission.save();
             }
-            return permission._id;
+            return null;
         }));
 
-        // Asignar los permisos al rol de administrador
-        adminRole.permissions = permissions;
-        await adminRole.save();
+        // Filtrar y eliminar valores nulos del array de permisos
+        const filteredPermissions = permissions.filter(permission => permission);
+
+        // Asignar los permisos al rol de administrador si se crearon nuevos permisos
+        if (filteredPermissions.length > 0) {
+            adminRole.permissions = [...filteredPermissions, ...adminRole.permissions];
+            await adminRole.save();
+        }
 
         // Crear el usuario administrador si no existe
         let adminUser = await User.findOne({ email: 'admin@example.com' });
