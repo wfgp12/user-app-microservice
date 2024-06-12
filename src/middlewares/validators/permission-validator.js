@@ -10,14 +10,14 @@ const validatePermission = (permission) => [
         .exists().withMessage('No se encontró al usuario').bail()
         .custom(async (user, {req}) => {
             try {
-                const permissions = await findPermissionsByRole({ _id: user.roles[0]._id})
+                const permissions = await findPermissionsByRole({ _id: user.roles[0]._id});
+
                 if (!permissions?.length || !permissions.includes(permission || req.body.permission)) {
-                    return res.status(403).json({ error: 'No tienes permisos para crear una nueva funcionalidad' });
+                    throw new Error('No tienes permisos para realizar esta acción');
                 }
                 return true;
             } catch (error) {
-                console.error('Error al validar los permisos del usuario:', error);
-                res.status(500).json({ error: 'Error interno del servidor' });
+                throw new Error(error.message);
             }
         }
         ).bail()

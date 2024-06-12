@@ -35,7 +35,6 @@ module.exports = {
             ]);
             return permissions?.permissions || null;
         } catch (error) {
-            console.error('Error al obtener los permisos:', error);
             throw new Error('Error al obtener los permisos');
         }
     },
@@ -57,7 +56,6 @@ module.exports = {
             ]);
             return role;
         } catch (error) {
-            console.error('Error al obtener el rol:', error);
             throw new Error('Error al obtener el rol');
         }
     },
@@ -65,7 +63,6 @@ module.exports = {
         try {
             return await Role.findOne(where)
         } catch (error) {
-            console.error('Error al obtener el rol:', error);
             throw new Error('Error al obtener el rol');
         }
     },
@@ -78,7 +75,6 @@ module.exports = {
     
             return resultado;
         } catch (error) {
-            console.error('Error al actualizar el rol:', error);
             throw error;
         }
     }

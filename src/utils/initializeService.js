@@ -53,7 +53,6 @@ async function initializeService() {
             console.log('Usuario administrador creado con éxito.');
         }
     } catch (error) {
-        console.error('Error al inicializar el servicio:', error);
         throw error; // Lanza el error para manejarlo fuera de la función
     }
 }

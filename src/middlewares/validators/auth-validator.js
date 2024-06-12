@@ -10,15 +10,12 @@ const validateToken = [
         .custom(async (value, { req }) => {
             const token = value.split(' ')[1];
             const decodedToken = verifyToken(token);
+            if (!decodedToken) throw new Error('Token de sesión inválido');
             
-            if (!decodedToken) {
-                throw new Error('Token de sesión inválido');
-            }
             try {
                 req.body.user = await findUser({ _id: new ObjectId(decodedToken.userId) });
                 return true;
             } catch (error) {
-                console.error('Error al decodificar el token:', error);
                 throw new Error('Token de sesión inválido');
             }
         }).bail()
